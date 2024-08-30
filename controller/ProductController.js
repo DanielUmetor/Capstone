@@ -31,5 +31,5 @@ productRouter.delete('/:id', (req, res) => {
 })
 
 export {
-    productRouter
+    productRouter, express
 }

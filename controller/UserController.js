@@ -1,10 +1,12 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import { users } from '../model/index.js'
+import { Carts } from '../model/Carts.js'
 
 const userRouter = express.Router()
 userRouter.use(bodyParser.json())
 
+// ... (rest of the userRouter definitions)
 userRouter.get('/', (req, res) => { 
     users.fetchUsers(req, res)
 })
@@ -29,7 +31,9 @@ userRouter.post('/login', (req, res) => {
     users.login(req, res)
 })
 
+
 export { 
     express,
     userRouter
 }
+

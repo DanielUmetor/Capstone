@@ -34,6 +34,6 @@ cartRouter.delete('/users/:id/cart/:id', (req, res) => {
 })
 
 export {
-    cartRouter
+    cartRouter, express
 }
 
