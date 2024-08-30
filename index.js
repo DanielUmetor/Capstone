@@ -1,5 +1,6 @@
 import { userRouter, express} from './controller/UserController.js'
 import { productRouter } from './controller/ProductController.js'
+import {cartRouter} from './controller/CartController.js'
 import cors from 'cors'
 import path from 'path'
 
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 
 app.use('/users', userRouter)
 app.use('/products', productRouter)
+app.use('/carts', cartRouter)
 app.use(
     express.static('./static'),
     express.json(),
@@ -33,7 +35,7 @@ app.use(
     })
 )
 
-app.get('^/$|/nodeEOMP', (req, res) => {
+app.get('^/$|/GameVaults', (req, res) => {
     res.status(200).sendFile(path.resolve('./static/html/index.html'))
 })
 
