@@ -4,14 +4,21 @@ class Carts{
     fetchCarts(req, res) {
         try{
             const strQry = `
-            SELECT * FROM Carts;
+            SELECT distinct c.userID, CONCAT(u.firstName, ' ', u.lastName) AS fullName,
+                group_concat(DISTINCT p.prodName) 'Product',
+                sum(p.amount * c.quantity)  'Total Price',
+                sum(c.quantity) 'Quantity'
+            FROM Carts c
+            JOIN Users u ON c.userID = u.userID
+            JOIN Products p ON c.prodID = p.prodID
+            group by c.userID;
 
             `
             db.query(strQry, (err, results) => {
                 if (err) throw new Error('Unable to fetch all carts')
                 res.json({
                     status: res.statusCode,
-                    results
+                    results: results
                  })
             })
         } catch (e) {
@@ -23,14 +30,23 @@ class Carts{
 
     }
 
-    fetchuserCarts(req, res) {
+    fetchuserCart(req, res) {
         try{
             const strQry = `
-            SELECT * FROM Cart WHERE userID = ?;
+            
+            SELECT distinct c.userID, CONCAT(u.firstName, ' ', u.lastName) AS fullName,
+                group_concat(DISTINCT p.prodName) 'Product',
+                sum(p.amount) 'Total Price',
+                sum(c.quantity) 'Quantity'
+            FROM Carts c
+            JOIN Users u ON c.userID = u.userID
+            JOIN Products p ON c.prodID = p.prodID
+            WHERE c.userID = ${req.params.id}
+            group by c.userID;
 
             `
             db.query(strQry, (err, results) => {
-                if (err) throw new Error('Unable to fetch all carts')
+                if (err) throw new Error(err)
                 res.json({
                     status: res.statusCode,
                     results
@@ -44,22 +60,22 @@ class Carts{
         }
 
     }
-
 
     fetchaddUserCart(req, res)  {
         try{
             const strQry = `
-            INSERT INTO Cart (userID, prodID, quantity) 
-            VALUES (?, ?, ?) 
-            ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(quantity);
-    
+            INSERT INTO Carts
+            (userID, prodID, quantity)
+            VALUES (${req.params.id}, ${req.body.prodID}, ${req.body.quantity});
             `
-            db.query(strQry, [req.body], (err) => {
-                if (err) throw new Error('Unable to add to cart')
+            console.log(req.params.id, req.body.prodID, req.body.quantity);
+            
+            db.query(strQry, (err, results) => {
+                if (err) throw new Error(err)
                 res.json({
-            status: res.statusCode,
-            result: result[0]
-        })
+                    status: res.statusCode,
+                    msg : 'added to cart '
+                })
             })
         }  catch (e){
             res.json({
@@ -72,15 +88,15 @@ class Carts{
     fetchupdateUserCart(req, res) {
         try{
             const strQry = `
-            UPDATE Cart 
-            SET quantity = ? 
-            WHERE cartID = ? AND userID = ?;
+            UPDATE Carts 
+            SET quantity = ${req.body.quantity}
+            WHERE prodID = ${req.params.prodID} AND userID = ${req.params.id};
             `
-            db.query(strQry, [req.body], (err) => {
+            db.query(strQry, (err, results) => {
                 if (err) throw new Error('Unable to update cart')
                 res.json({
                     status: res.statusCode,
-                    result: result[0]
+                    msg: 'The quantity has been updated. Aragato😁'
                 })
             })
         } catch (e) {
@@ -111,27 +127,6 @@ class Carts{
         }
     }
 
-    fetchDeleteSpecificItemsinCart(req, res) {
-        try{
-
-            const strQry = `
-            DELETE FROM Cart 
-            WHERE cartID = ? AND userID = ?;
-            `
-            db.query(strQry, (err) => {
-                if (err) throw new Error('Unable to delete a item cart')
-                res.json({
-                     status: res.statusCode,
-                     msg: 'A item in cart was removed'
-            })
-            })
-}     catch (e) {
-    res.json({
-        status: 404,
-        err: e.message
-    })
-}
-    }
 }
 
 export { 

@@ -1,6 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import { users } from '../model/index.js'
+import { carts, users } from '../model/index.js'
 import { Carts } from '../model/Carts.js'
 
 const userRouter = express.Router()
@@ -11,7 +11,7 @@ userRouter.get('/', (req, res) => {
     users.fetchUsers(req, res)
 })
 
-userRouter.get('/:id', (req, res) => { 
+userRouter.get('/singleUser/:id', (req, res) => { 
     users.fetchUser(req, res)
 })
 
@@ -32,8 +32,33 @@ userRouter.post('/login', (req, res) => {
 })
 
 
+// Carts endpoints 
+userRouter.get('/carts', (req, res) => {
+    carts.fetchCarts(req, res)
+})
+
+userRouter.get('/:id/cart', (req, res) =>{
+    carts.fetchuserCart(req, res)
+})
+
+userRouter.post('/:id/cart', (req, res) =>{
+    carts.fetchaddUserCart(req, res)
+})
+
+userRouter.patch('/:id/cart/:prodID', (req, res) =>{
+    carts.fetchupdateUserCart(req, res)
+})
+
+
+
+userRouter.delete('/:id/deleteitems'), (req, res) => {
+    carts.fetchdeleteItemsCart(req, res)
+}
+
+
 export { 
     express,
     userRouter
 }
+
 
