@@ -34,16 +34,15 @@ class Carts{
         try{
             const strQry = `
             
-            SELECT distinct c.userID, CONCAT(u.firstName, ' ', u.lastName) AS fullName,
-                group_concat(DISTINCT p.prodName) 'Product',
-                sum(p.amount) 'Total Price',
-                sum(c.quantity) 'Quantity'
+            SELECT c.userID, CONCAT(u.firstName, ' ', u.lastName) AS fullName,
+                p.prodID,
+                p.prodName 'Product',
+                p.amount * c.quantity  'Total Price',
+                c.quantity 'Quantity'
             FROM Carts c
             JOIN Users u ON c.userID = u.userID
             JOIN Products p ON c.prodID = p.prodID
-            WHERE c.userID = ${req.params.id}
-            group by c.userID;
-
+            WHERE c.userID = ${req.params.id};         
             `
             db.query(strQry, (err, results) => {
                 if (err) throw new Error(err)
@@ -107,13 +106,35 @@ class Carts{
         }
     }
 
-    fetchdeleteItemsCart(req, res) { 
+    deleteItem(req, res) { 
         try{
             const strQry = `
-            DELETE FROM Cart WHERE userID = ?;
+            DELETE FROM Carts
+            WHERE prodID = ${req.params.prodID} AND userID = ${req.params.id};
             `
             db.query(strQry, (err) => {
-                if (err) throw new Error('Unable to delete cart')
+                if (err) throw new Error('Unable to delete item')
+                res.json({
+            status: res.statusCode,
+            msg: 'An item was removed'
+            })
+            })
+        } catch (e) {
+            res.json({
+                status: 404,
+                err: e.message
+            })
+        }
+    }
+
+    deleteCart(req,res){
+        try{
+            const strQry = `
+            DELETE FROM Carts
+            WHERE userID = ${req.params.id};
+            `
+            db.query(strQry, (err) => {
+                if (err) throw new Error('Unable to delete this Cart')
                 res.json({
             status: res.statusCode,
             msg: 'A cart was removed'

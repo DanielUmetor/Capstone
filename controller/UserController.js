@@ -31,8 +31,8 @@ userRouter.post('/login', (req, res) => {
     users.login(req, res)
 })
 
+// Carts endpoints
 
-// Carts endpoints 
 userRouter.get('/carts', (req, res) => {
     carts.fetchCarts(req, res)
 })
@@ -50,11 +50,13 @@ userRouter.patch('/:id/cart/:prodID', (req, res) =>{
 })
 
 
+userRouter.delete('/:id/cart', (req, res) => {
+    carts.deleteCart(req, res)
+})
 
-userRouter.delete('/:id/deleteitems'), (req, res) => {
-    carts.fetchdeleteItemsCart(req, res)
-}
-
+userRouter.delete('/:id/cart/:prodID',(req, res) =>{
+    carts.deleteItem(req,res)
+})
 
 export { 
     express,
