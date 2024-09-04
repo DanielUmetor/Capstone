@@ -1,5 +1,19 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
-</template>
+    <div class="about">
+      <!-- About section -->
+      <section class="about-us">
+        <h1>About GameVaults</h1>
+        <!-- About content -->
+      </section>
+    </div>
+  </template>
+  
+  <script>
+  export default {
+    name: 'AboutView'
+  }
+  </script>
+  
+  <style>
+  /* About page styles */
+  </style>
