@@ -4,6 +4,10 @@
       <source src="../assets/home page.mp4" type="video/mp4">
     </video>
   </div>
+  <!-- Add your navbar here -->
+  <nav>
+    <!-- navbar content -->
+  </nav>
 </template>
 
 <script>
@@ -27,18 +31,27 @@ export default {
 </script>
 
 <style>
+  body {
+    margin: 0; /* remove default margin */
+  }
   .container {
-    position: relative;
-    height: calc(100vh - 70px); /* subtract the navbar height */
+    position: fixed; /* changed from absolute to fixed */
+    top: 0; /* added to position at the top of the page */
+    left: 0; /* added to position at the left of the page */
+    width: 100%; /* added to take up the full width */
+    height: 100vh; /* changed to take up the full height of the viewport */
     overflow: hidden;
     text-align: center;
-    margin-top: 70px; /* Adjust for the fixed nav bar */
+    z-index: -1; /* added to send the video behind the navbar */
   }
   .header-video {
-    width: 100%;
+    width: 100%; /* take up the full width of the container */
     height: 100%; /* take up the full height of the container */
     object-fit: cover;
-    border-radius: 10px; /* optional */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* optional */
+  }
+  nav {
+    position: relative; /* added to position the navbar on top of the video */
+    z-index: 1; /* added to bring the navbar to the front */
+    /* add your navbar styles here */
   }
 </style>
