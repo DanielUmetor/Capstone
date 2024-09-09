@@ -1,4 +1,4 @@
-# capstone-frontend
+# eshop
 
 ## Project setup
 ```

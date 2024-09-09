@@ -1,19 +1,7 @@
 <template>
-    <div class="about">
-      <!-- About section -->
-      <section class="about-us">
-        <h1>About GameVaults</h1>
-        <!-- About content -->
-      </section>
+  <div class="container">
+    <div class="row">
+      <h2 class="display-2">About</h2>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'AboutView'
-  }
-  </script>
-  
-  <style>
-  /* About page styles */
-  </style>
+  </div>
+</template>
