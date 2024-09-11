@@ -12,7 +12,8 @@
       <h2>Recent Products</h2>
       <div class="card-container">
         <div v-for="product in recentProducts" :key="product.id" class="card">
-          <img :src="product.image" :alt="product.prodName">
+          <!-- Use prodURL for the image source -->
+          <img :src="product.prodURL" :alt="product.prodName">
           <h3>{{ product.prodName }}</h3>
           <p>{{ product.prodDescription }}</p>
           <div class="card-buttons">
@@ -57,6 +58,7 @@ export default {
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
 /* Global styles for body and app */
 html, body {
   margin: 0;
