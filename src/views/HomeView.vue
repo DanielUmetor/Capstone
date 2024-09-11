@@ -1,65 +1,82 @@
 <template>
-  <div class="video-container">
-    <video src="../assets/home page.mp4" class="full-screen-video" autoplay muted loop></video>
-  </div>
-  <nav class="navbar">
-    <!-- navbar content -->
-  </nav>
+  <div id="app">
+    <div class="video-container">
+      <video src="../assets/home page.mp4" class="full-screen-video" autoplay muted loop></video>
+    </div>
 
-  <section class="recent-products">
-    <h2>Recent Products</h2>
-    <div class="card-container">
-      <div v-for="product in recentProducts" :key="product.id" class="card">
-        <img :src="product.image" :alt="product.name">
-        <h3>{{ product.prodName }}</h3>
-        <p>{{ product.prodDescription }}</p>
-        <div class="card-buttons">
-          <button class="add-to-cart">Add to Cart</button>
-          <button class="view-more">View More</button>
+    <nav class="navbar">
+      <!-- navbar content -->
+    </nav>
+
+    <section class="recent-products">
+      <h2>Recent Products</h2>
+      <div class="card-container">
+        <div v-for="product in recentProducts" :key="product.id" class="card">
+          <img :src="product.image" :alt="product.prodName">
+          <h3>{{ product.prodName }}</h3>
+          <p>{{ product.prodDescription }}</p>
+          <div class="card-buttons">
+            <button class="add-to-cart">Add to Cart</button>
+            <button class="view-more">View More</button>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <footer class="footer-container">
-    <!-- footer content -->
-  </footer>
+    <FooterComp/>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'HomeView',
-  components: {
-    // Card,
-    // Spinner
-  },
   data() {
     return {
-      recentProducts: []
+      recentProducts: [] // Array to hold the specific products
     }
   },
   async mounted() {
-    const response = await fetch('https://capstone-i0ct.onrender.com/products');
-    const data = await response.json();
-    this.recentProducts = data;
+    // Array of specific product IDs you want to fetch
+    const prodID = [1, 2]; // Replace these with the actual IDs
+
+    // Fetch products by their IDs
+    const productPromises = prodID.map(id => 
+      fetch(`https://capstone-i0ct.onrender.com/products/${id}`)
+        .then(response => response.json())
+    );
+
+    // Wait for all product fetches to complete
+    const products = await Promise.all(productPromises);
+
+    // Set the fetched products to the data property
+    this.recentProducts = products;
   }
 }
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+/* Global styles for body and app */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
 }
 
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure the app takes full viewport height */
+}
+
+/* Full-Screen Video Section */
 .video-container {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100vh; /* Full viewport height */
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .full-screen-video {
@@ -68,10 +85,11 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* Ensures the video covers the entire container */
   z-index: -1;
 }
 
+/* Navbar */
 .navbar {
   position: absolute;
   top: 0;
@@ -82,6 +100,7 @@ html, body {
   color: #fff;
 }
 
+/* Recent Products Section */
 .recent-products {
   background-color: #1e1e1e;
   padding: 40px 20px;
@@ -92,7 +111,7 @@ html, body {
   font-family: 'Roboto', sans-serif;
   font-size: 2.5rem;
   font-weight: bold;
-  color: #ff69b4; /* Vibrant color for the heading */
+  color: #ff69b4;
   margin: 0;
   position: relative;
 }
@@ -109,12 +128,13 @@ html, body {
   border-radius: 5px;
 }
 
+/* Cards */
 .card-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px; /* Space between cards */
-  margin-top: 40px; /* Space between heading and cards */
+  gap: 20px;
+  margin-top: 40px;
 }
 
 .card {
@@ -125,7 +145,6 @@ html, body {
   padding: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  position: relative;
 }
 
 .card img {
@@ -142,7 +161,7 @@ html, body {
 .card-buttons {
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Space between buttons */
+  gap: 10px;
   margin-top: 10px;
 }
 
@@ -157,14 +176,12 @@ html, body {
 }
 
 .add-to-cart:hover, .view-more:hover {
-  background-color: #e55b9d; /* Slightly darker shade on hover */
+  background-color: #e55b9d;
 }
 
-.footer-container {
-  background-color: #1e1e1e;
-  padding: 20px;
-  color: #dcdcdc;
-  border-top: 2px solid #ff69b4;
-  max-height: 100px; /* Set a maximum height for the footer */
+/* Footer */
+footer {
+  flex-shrink: 0;
+  margin-top: auto; /* Ensures the footer stays at the bottom */
 }
 </style>
