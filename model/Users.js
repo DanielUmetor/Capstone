@@ -124,50 +124,53 @@ class Users {
             })
         }
     }
-    async login(req, res) {
+    async login (req, res) {
         try {
-            const { emailAdd, userPass } = req.body
-            const strQry = `
-        SELECT *
-        FROM Users
-        WHERE emailAdd = '${emailAdd}';
-        `
-            db.query(strQry, async (err, result) => {
-                if (err) throw new Error('To login, please review your query.')
-                if (!result?.length) {
-                    res.json(
-                        {
-                            status: 401,
-                            msg: 'You provided a wrong email.'
-                        }
-                    )
-                } else {
-                    const isValidPass = await compare(userPass, result[0].userPass)
-                    if (isValidPass) {
-                        const token = createToken({
-                            emailAdd,
-                            userPass
-                        })
-                        res.json({
-                            status: res.statusCode,
-                            token,
-                            result: result[0]
-                        })
-                    } else {
-                        res.json({
-                            status: 401,
-                            msg: 'Invalid password or you have not registered'
-                        })
-                    }
-                }
-            })
-        } catch (e) {
-            res.json({
+          const { emailAdd, userPass } = req.body;
+          const strQry = `
+                SELECT *
+                FROM Users
+                WHERE emailAdd = '${emailAdd}';
+            `;
+          db.query(strQry, async (err, result) => {
+            if (err) {
+              res.json({
                 status: 404,
-                msg: e.message
-            })
+                msg: "Error occurred while querying the database.",
+              });
+            } else if (!result?.length) {
+              res.json({
+                status: 401,
+                msg: "You provided a wrong email.",
+              });
+            } else {
+              const isValidPass = await compare(userPass, result[0].userPass);
+              if (isValidPass) {
+                const token = createToken({
+                  emailAdd,
+                  userPass,
+                });
+                res.json({
+                  status: res.statusCode,
+                  token,
+                  result: result[0],
+                  msg: "Successfully logged in"
+                });
+              } else {
+                res.json({
+                  status: 401,
+                  msg: "Invalid password or you have not registered.",
+                });
+              }
+            }
+          });
+        } catch (e) {
+          res.json({
+            status: 404,
+            msg: e.message,
+          });
         }
-    }
+      }
 }
 export {
     Users

@@ -31,6 +31,7 @@ userRouter.post('/login', (req, res) => {
     users.login(req, res)
 })
 
+
 // Carts endpoints
 
 userRouter.get('/carts', (req, res) => {
