@@ -1,4 +1,4 @@
-# eshop
+# Capstone
 
 ## Project setup
 ```
