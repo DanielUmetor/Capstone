@@ -37,21 +37,20 @@ export default {
     }
   },
   async mounted() {
-    // Array of specific product IDs you want to fetch
-    const prodID = [1, 2]; // Replace these with the actual IDs
+  const prodID = [1, 2]; // Replace these with the actual IDs
 
-    // Fetch products by their IDs
-    const productPromises = prodID.map(id => 
-      fetch(`https://capstone-i0ct.onrender.com/products/${id}`)
-        .then(response => response.json())
-    );
+  const productPromises = prodID.map(id => 
+    fetch(`https://capstone-i0ct.onrender.com/products/${id}`)
+      .then(response => response.json())
+  );
 
-    // Wait for all product fetches to complete
-    const products = await Promise.all(productPromises);
+  const products = await Promise.all(productPromises);
 
-    // Set the fetched products to the data property
-    this.recentProducts = products;
-  }
+  this.recentProducts = products.map(product => ({
+    ...product,
+    prodImage: `https://capstone-i0ct.onrender.com/products/${product.id}/` // Assuming this is the image URL endpoint
+  }));
+}
 }
 </script>
 
