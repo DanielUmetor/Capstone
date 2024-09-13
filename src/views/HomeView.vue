@@ -2,6 +2,9 @@
   <div id="app">
     <div class="video-container">
       <video src="../assets/home page.mp4" class="full-screen-video" autoplay muted loop></video>
+      <div class="overlay-text">
+        <h1>WELCOME TO GAME VAULTS</h1>
+      </div>
     </div>
 
     <nav class="navbar">
@@ -13,7 +16,7 @@
       <div class="card-container">
         <div v-for="product in recentProducts" :key="product.id" class="card">
           <!-- Use prodURL for the image source -->
-          <img :src="product.prodURL" :alt="product.prodName">
+          <img :src="product.prodURL" :alt="product.prodName" />
           <h3>{{ product.prodName }}</h3>
           <p>{{ product.prodDescription }}</p>
           <div class="card-buttons">
@@ -33,24 +36,24 @@ export default {
   name: 'HomeView',
   data() {
     return {
-      recentProducts: [] // Array to hold the specific products
+      recentProducts: []
     }
   },
   async mounted() {
-  const prodID = [1, 2]; // Replace these with the actual IDs
+    const prodID = [1, 2];
 
-  const productPromises = prodID.map(id => 
-    fetch(`https://capstone-i0ct.onrender.com/products/${id}`)
-      .then(response => response.json())
-  );
+    const productPromises = prodID.map(id => 
+      fetch(`https://capstone-i0ct.onrender.com/products/${id}`)
+        .then(response => response.json())
+    );
 
-  const products = await Promise.all(productPromises);
+    const products = await Promise.all(productPromises);
 
-  this.recentProducts = products.map(product => ({
-    ...product,
-    prodImage: `https://capstone-i0ct.onrender.com/products/${product.id}/` // Assuming this is the image URL endpoint
-  }));
-}
+    this.recentProducts = products.map(product => ({
+      ...product,
+      prodImage: `https://capstone-i0ct.onrender.com/products/${product.id}/`
+    }));
+  }
 }
 </script>
 
@@ -58,7 +61,6 @@ export default {
 
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 
-/* Global styles for body and app */
 html, body {
   margin: 0;
   padding: 0;
@@ -68,14 +70,13 @@ html, body {
 #app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Ensure the app takes full viewport height */
+  min-height: 100vh;
 }
 
-/* Full-Screen Video Section */
 .video-container {
   position: relative;
   width: 100%;
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -86,8 +87,27 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures the video covers the entire container */
+  object-fit: cover;
   z-index: -1;
+}
+
+.overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.overlay-text h1 {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 4rem;
+  color: #ff69b4; /* Matches your theme color */
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7); /* Adds a shadow to make the text stand out */
+  margin: 0;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for contrast */
+  border-radius: 10px;
 }
 
 /* Navbar */
@@ -113,8 +133,6 @@ html, body {
   font-size: 2.5rem;
   font-weight: bold;
   color: #ff69b4;
-  margin: 0;
-  position: relative;
 }
 
 .recent-products h2::before {
@@ -180,9 +198,8 @@ html, body {
   background-color: #e55b9d;
 }
 
-/* Footer */
 footer {
   flex-shrink: 0;
-  margin-top: auto; /* Ensures the footer stays at the bottom */
+  margin-top: auto;
 }
 </style>
