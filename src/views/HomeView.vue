@@ -4,6 +4,7 @@
       <video src="../assets/home page.mp4" class="full-screen-video" autoplay muted loop></video>
       <div class="overlay-text">
         <h1>WELCOME TO GAME VAULTS</h1>
+        <router-link to="/products" class="shop-now-button">Shop Now</router-link>
       </div>
     </div>
 
@@ -11,54 +12,17 @@
       <!-- navbar content -->
     </nav>
 
-    <section class="recent-products">
-      <h2>Recent Products</h2>
-      <div class="card-container">
-        <div v-for="product in recentProducts" :key="product.id" class="card">
-          <!-- Use prodURL for the image source -->
-          <img :src="product.prodURL" :alt="product.prodName" />
-          <h3>{{ product.prodName }}</h3>
-          <p>{{ product.prodDescription }}</p>
-          <div class="card-buttons">
-            <button class="add-to-cart">Add to Cart</button>
-            <button class="view-more">View More</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <FooterComp/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HomeView',
-  data() {
-    return {
-      recentProducts: []
-    }
-  },
-  async mounted() {
-    const prodID = [1, 2];
-
-    const productPromises = prodID.map(id => 
-      fetch(`https://capstone-i0ct.onrender.com/products/${id}`)
-        .then(response => response.json())
-    );
-
-    const products = await Promise.all(productPromises);
-
-    this.recentProducts = products.map(product => ({
-      ...product,
-      prodImage: `https://capstone-i0ct.onrender.com/products/${product.id}/`
-    }));
-  }
+  name: 'HomeView'
 }
 </script>
 
 <style>
-
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 
 html, body {
@@ -110,6 +74,24 @@ html, body {
   border-radius: 10px;
 }
 
+.shop-now-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 15px 30px;
+  font-size: 1.5rem;
+  color: #fff;
+  background-color: #ff69b4;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.shop-now-button:hover {
+  background-color: #e55b9d;
+}
+
 /* Navbar */
 .navbar {
   position: absolute;
@@ -119,83 +101,6 @@ html, body {
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.5);
   color: #fff;
-}
-
-/* Recent Products Section */
-.recent-products {
-  background-color: #1e1e1e;
-  padding: 40px 20px;
-  text-align: center;
-}
-
-.recent-products h2 {
-  font-family: 'Roboto', sans-serif;
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #ff69b4;
-}
-
-.recent-products h2::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -10px;
-  width: 60px;
-  height: 5px;
-  background-color: #ff69b4;
-  transform: translateX(-50%);
-  border-radius: 5px;
-}
-
-/* Cards */
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 40px;
-}
-
-.card {
-  width: 250px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 10px 10px 0 0;
-}
-
-.card h3 {
-  margin-top: 10px;
-}
-
-.card-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.add-to-cart, .view-more {
-  background-color: #ff69b4;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.add-to-cart:hover, .view-more:hover {
-  background-color: #e55b9d;
 }
 
 footer {
